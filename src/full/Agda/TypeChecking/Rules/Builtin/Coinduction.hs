@@ -3,6 +3,7 @@
 ------------------------------------------------------------------------
 
 -- {-# LANGUAGE CPP #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Agda.TypeChecking.Rules.Builtin.Coinduction where
 

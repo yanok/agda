@@ -1,12 +1,14 @@
 -- {-# LANGUAGE CPP #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PatternGuards #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeSynonymInstances #-}
 
 -- | Functions for abstracting terms over other terms.
 module Agda.TypeChecking.Abstract where
 
 import Control.Monad
+
 import Data.Function
 
 import Agda.Syntax.Common hiding (Arg, Dom, NamedArg)

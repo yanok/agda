@@ -1,8 +1,11 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE NoMonomorphismRestriction #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Agda.Auto.Convert where
 
 import Control.Applicative hiding (getConst, Const(..))
+
 import Data.IORef
 import Data.Map (Map)
 import qualified Data.Map as Map

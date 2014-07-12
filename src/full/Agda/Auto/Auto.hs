@@ -1,9 +1,11 @@
 {-# LANGUAGE CPP #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Agda.Auto.Auto (auto) where
 
 import Control.Monad.Error
 import Control.Monad.State
+
 import Data.List
 import qualified Data.Map as Map
 import Data.IORef
