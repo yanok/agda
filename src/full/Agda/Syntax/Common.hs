@@ -12,8 +12,8 @@ module Agda.Syntax.Common where
 
 import Control.Applicative
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.Foldable
 import Data.Hashable
 import Data.Traversable
@@ -359,8 +359,8 @@ class Eq a => Underscore a where
 instance Underscore String where
   underscore = "_"
 
-instance Underscore ByteString where
-  underscore = ByteString.pack underscore
+instance Underscore Text where
+  underscore = Text.pack underscore
 
 instance Underscore Doc where
   underscore = text underscore
@@ -508,13 +508,13 @@ instance Decoration Ranged where
 ---------------------------------------------------------------------------
 
 -- | A @RawName@ is some sort of string.
-type RawName = ByteString
+type RawName = Text
 
 rawNameToString :: RawName -> String
-rawNameToString = ByteString.unpack
+rawNameToString = Text.unpack
 
 stringToRawName :: String -> RawName
-stringToRawName = ByteString.pack
+stringToRawName = Text.pack
 
 -- | String with range info.
 type RString = Ranged RawName

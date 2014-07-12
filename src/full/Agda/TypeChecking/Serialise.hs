@@ -30,8 +30,8 @@ import Control.Monad.Reader
 import Control.Monad.State.Strict
 import Control.Monad.Error
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.Array.IArray
 import Data.Word
 import qualified Data.ByteString.Lazy as L
@@ -46,6 +46,7 @@ import qualified Data.Set as S
 import qualified Data.Binary as B
 import qualified Data.Binary.Get as B
 import qualified Data.Binary.Put as B
+import qualified Data.Text.Binary as B
 import qualified Data.List as List
 import Data.Function
 import Data.Typeable
@@ -115,7 +116,7 @@ type HashTable k v = H.BasicHashTable k v
 data Dict = Dict
   { nodeD        :: !(HashTable Node       Int32)
   , stringD      :: !(HashTable String     Int32)
-  , byteStringD  :: !(HashTable ByteString Int32)
+  , byteStringD  :: !(HashTable Text Int32)
   , integerD     :: !(HashTable Integer    Int32)
   , doubleD      :: !(HashTable Double     Int32)
   , termD        :: !(HashTable (Ptr Term) Int32)
@@ -138,7 +139,7 @@ type Memo = HashTable (Int32, TypeRep) U    -- (node index, type rep)
 data St = St
   { nodeE       :: !(Array Int32 Node)
   , stringE     :: !(Array Int32 String)
-  , byteStringE :: !(Array Int32 ByteString)
+  , byteStringE :: !(Array Int32 Text)
   , integerE    :: !(Array Int32 Integer)
   , doubleE     :: !(Array Int32 Double)
   , nodeMemo    :: !Memo
@@ -311,7 +312,7 @@ instance EmbPrj String where
   icode   = icodeX stringD stringC
   value i = (! i) `fmap` gets stringE
 
-instance EmbPrj ByteString where
+instance EmbPrj Text where
   icode   = icodeX byteStringD byteStringC
   value i = (! i) `fmap` gets byteStringE
 

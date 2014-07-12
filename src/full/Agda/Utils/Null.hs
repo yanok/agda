@@ -2,8 +2,8 @@
 
 module Agda.Utils.Null where
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import qualified Data.List as List
 import Data.Map (Map)
 import qualified Data.Map as Map
@@ -17,9 +17,9 @@ class Null a where
   null  :: a -> Bool
   -- ^ Satisfying @null empty == True@.
 
-instance Null ByteString where
-  empty = ByteString.empty
-  null  = ByteString.null
+instance Null Text where
+  empty = Text.empty
+  null  = Text.null
 
 instance Null [a] where
   empty = []

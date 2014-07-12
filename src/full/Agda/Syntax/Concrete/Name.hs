@@ -12,8 +12,8 @@ module Agda.Syntax.Concrete.Name where
 import Control.DeepSeq
 import Control.Applicative
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.List
 import Data.Typeable (Typeable)
 
@@ -118,7 +118,7 @@ newtype TopLevelModuleName
 ------------------------------------------------------------------------
 
 nameToRawName :: Name -> RawName
-nameToRawName = ByteString.pack . show
+nameToRawName = Text.pack . show
 
 nameParts :: Name -> [NamePart]
 nameParts (Name _ ps)  = ps
@@ -225,7 +225,7 @@ class IsNoName a where
 instance IsNoName String where
   isNoName = isUnderscore
 
-instance IsNoName ByteString where
+instance IsNoName Text where
   isNoName = isUnderscore
 
 instance IsNoName Name where

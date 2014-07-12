@@ -16,8 +16,8 @@ module Agda.Syntax.Abstract.Name
 
 import Control.Monad.State
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.Foldable (Foldable)
 import Data.Traversable (Traversable)
 import Data.Typeable (Typeable)
@@ -133,8 +133,8 @@ class MkName a where
 instance MkName String where
   mkName r i s = Name i (C.Name noRange (C.stringNameParts s)) r defaultFixity'
 
-instance MkName ByteString where
-  mkName r i = mkName r i . ByteString.unpack
+instance MkName Text where
+  mkName r i = mkName r i . Text.unpack
 
 
 qnameToList :: QName -> [Name]
@@ -230,11 +230,11 @@ instance FreshName Range where
 instance FreshName () where
   freshName_ () = freshNoName_
 
-instance FreshName (Range, ByteString) where
-  freshName_ (r, x) = freshName_ (r, ByteString.unpack x)
+instance FreshName (Range, Text) where
+  freshName_ (r, x) = freshName_ (r, Text.unpack x)
 
-instance FreshName ByteString where
-  freshName_ = freshName_ . ByteString.unpack
+instance FreshName Text where
+  freshName_ = freshName_ . Text.unpack
 
 -- | Get the next version of the concrete name. For instance, @nextName "x" = "x₁"@.
 --   The name must not be a 'NoName'.
@@ -247,9 +247,9 @@ nextName x = x { nameConcrete = C.Name noRange $ nextSuf ps }
 	nextSuf [C.Id s, C.Hole] = [C.Id $ nextStr s, C.Hole]
 	nextSuf (p : ps)         = p : nextSuf ps
 	nextSuf []               = __IMPOSSIBLE__
-        nextStr :: ByteString -> ByteString
-	nextStr s = case suffixView $ ByteString.unpack s of
-	    (s0, suf) -> ByteString.pack $ addSuffix s0 (nextSuffix suf)
+        nextStr :: Text -> Text
+	nextStr s = case suffixView $ Text.unpack s of
+	    (s0, suf) -> Text.pack $ addSuffix s0 (nextSuffix suf)
 
 ------------------------------------------------------------------------
 -- * Important instances: Eq, Ord, Hashable

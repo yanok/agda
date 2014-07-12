@@ -24,8 +24,8 @@ import Control.Monad.Identity hiding (mapM)
 import Control.Monad.State hiding (mapM)
 import Control.Parallel
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.Foldable
 import Data.Function
 import qualified Data.List as List
@@ -138,16 +138,16 @@ type Elim = Elim' Term
 type Elims = [Elim]  -- ^ eliminations ordered left-to-right.
 
 -- | Names in binders and arguments.
-type ArgName = ByteString
+type ArgName = Text
 
 argNameToString :: ArgName -> String
-argNameToString = ByteString.unpack
+argNameToString = Text.unpack
 
 stringToArgName :: String -> ArgName
-stringToArgName = ByteString.pack
+stringToArgName = Text.pack
 
 appendArgNames :: ArgName -> ArgName -> ArgName
-appendArgNames = ByteString.append
+appendArgNames = Text.append
 
 nameToArgName :: Name -> ArgName
 nameToArgName = stringToArgName . show
@@ -552,11 +552,11 @@ instance Suggest String String where
   suggest "_" y = y
   suggest  x  _ = x
 
-instance Suggest ByteString String where
-  suggest = suggest . ByteString.unpack
+instance Suggest Text String where
+  suggest = suggest . Text.unpack
 
-instance Suggest ByteString ByteString where
-  suggest = suggest `on` ByteString.unpack
+instance Suggest Text Text where
+  suggest = suggest `on` Text.unpack
 
 instance Suggest (Abs a) (Abs b) where
   suggest b1 b2 = suggest (absName b1) (absName b2)

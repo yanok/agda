@@ -5,8 +5,8 @@ module Agda.TypeChecking.Monad.Context where
 
 import Control.Monad.Reader
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.List hiding (sort)
 import qualified Data.Map as Map
 
@@ -111,10 +111,10 @@ instance AddContext (Dom (String, Type)) where
   addContext = addContext . distributeF
   -- addContext dom = addContext (fst $ unDom dom, snd <$> dom)
 
-instance AddContext (ByteString, Dom Type) where
-  addContext (s, dom) = addContext (ByteString.unpack s, dom)
+instance AddContext (Text, Dom Type) where
+  addContext (s, dom) = addContext (Text.unpack s, dom)
 
-instance AddContext (Dom (ByteString, Type)) where
+instance AddContext (Dom (Text, Type)) where
   addContext = addContext . distributeF
 
 instance AddContext Name where
@@ -123,8 +123,8 @@ instance AddContext Name where
 instance AddContext String where
   addContext s = addContext (s, dummyDom)
 
-instance AddContext ByteString where
-  addContext s = addContext (ByteString.unpack s, dummyDom) -- TODO: no unpack
+instance AddContext Text where
+  addContext s = addContext (Text.unpack s, dummyDom) -- TODO: no unpack
 
 instance AddContext Telescope where
   addContext tel ret = loop tel where

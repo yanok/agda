@@ -67,8 +67,8 @@ module Agda.Syntax.Position
 import Control.Applicative
 import Control.Monad
 
-import Data.ByteString.Char8 (ByteString)
-import qualified Data.ByteString.Char8 as ByteString
+import Data.Text (Text)
+import qualified Data.Text as Text
 import Data.Foldable (Foldable)
 import Data.Function
 import Data.Int
@@ -250,7 +250,7 @@ instance KillRange Bool where
 instance KillRange Int where
   killRange = id
 
-instance KillRange ByteString where
+instance KillRange Text where
   killRange = id
 
 instance KillRange a => KillRange [a] where
