@@ -118,7 +118,7 @@ newtype TopLevelModuleName
 ------------------------------------------------------------------------
 
 nameToRawName :: Name -> RawName
-nameToRawName = show
+nameToRawName = ByteString.pack . show
 
 nameParts :: Name -> [NamePart]
 nameParts (Name _ ps)  = ps

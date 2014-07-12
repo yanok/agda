@@ -508,13 +508,13 @@ instance Decoration Ranged where
 ---------------------------------------------------------------------------
 
 -- | A @RawName@ is some sort of string.
-type RawName = String
+type RawName = ByteString
 
 rawNameToString :: RawName -> String
-rawNameToString = id
+rawNameToString = ByteString.unpack
 
 stringToRawName :: String -> RawName
-stringToRawName = id
+stringToRawName = ByteString.pack
 
 -- | String with range info.
 type RString = Ranged RawName

@@ -247,8 +247,9 @@ nextName x = x { nameConcrete = C.Name noRange $ nextSuf ps }
 	nextSuf [C.Id s, C.Hole] = [C.Id $ nextStr s, C.Hole]
 	nextSuf (p : ps)         = p : nextSuf ps
 	nextSuf []               = __IMPOSSIBLE__
-	nextStr s = case suffixView s of
-	    (s0, suf) -> addSuffix s0 (nextSuffix suf)
+        nextStr :: ByteString -> ByteString
+	nextStr s = case suffixView $ ByteString.unpack s of
+	    (s0, suf) -> ByteString.pack $ addSuffix s0 (nextSuffix suf)
 
 ------------------------------------------------------------------------
 -- * Important instances: Eq, Ord, Hashable

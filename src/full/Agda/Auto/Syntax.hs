@@ -3,6 +3,8 @@
 
 module Agda.Auto.Syntax where
 
+import Data.ByteString.Char8 (ByteString)
+import qualified Data.ByteString.Char8 as ByteString
 import Data.IORef
 
 import Agda.Auto.NarrowingSearch
@@ -70,11 +72,11 @@ data FMode = Hidden
  deriving Eq
 
 
-data MId = Id String
+data MId = Id ByteString
          | NoId
 
 stringToMyId :: String -> MId
-stringToMyId = Id
+stringToMyId = Id . ByteString.pack
 
 -- | Abstraction with maybe a name.
 --

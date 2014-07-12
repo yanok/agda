@@ -138,16 +138,16 @@ type Elim = Elim' Term
 type Elims = [Elim]  -- ^ eliminations ordered left-to-right.
 
 -- | Names in binders and arguments.
-type ArgName = String
+type ArgName = ByteString
 
 argNameToString :: ArgName -> String
-argNameToString = id
+argNameToString = ByteString.unpack
 
 stringToArgName :: String -> ArgName
-stringToArgName = id
+stringToArgName = ByteString.pack
 
 appendArgNames :: ArgName -> ArgName -> ArgName
-appendArgNames = (++)
+appendArgNames = ByteString.append
 
 nameToArgName :: Name -> ArgName
 nameToArgName = stringToArgName . show
