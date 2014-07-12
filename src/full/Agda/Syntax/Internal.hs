@@ -24,6 +24,8 @@ import Control.Monad.Identity hiding (mapM)
 import Control.Monad.State hiding (mapM)
 import Control.Parallel
 
+import Data.ByteString.Char8 (ByteString)
+import qualified Data.ByteString.Char8 as ByteString
 import Data.Foldable
 import Data.Function
 import qualified Data.List as List

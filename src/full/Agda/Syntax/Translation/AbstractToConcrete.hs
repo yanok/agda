@@ -33,6 +33,8 @@ import Prelude hiding (null)
 import Control.Applicative hiding (empty)
 import Control.Monad.Reader
 
+import Data.ByteString.Char8 (ByteString)
+import qualified Data.ByteString.Char8 as ByteString
 import Data.List as List hiding (null)
 import qualified Data.Map as Map
 import qualified Data.Set as Set
