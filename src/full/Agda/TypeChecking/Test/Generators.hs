@@ -9,6 +9,9 @@ module Agda.TypeChecking.Test.Generators where
 
 import Control.Applicative
 import Control.Monad.State
+
+import Data.ByteString.Char8 (ByteString)
+import qualified Data.ByteString.Char8 as ByteString
 import qualified Data.List as List (sort, nub)
 
 import Agda.Syntax.Position
@@ -233,6 +236,9 @@ instance GenC Sort where
       freq f = f $ tcFrequencies conf
       setFs = freq (setFreqs . sortFreqs)
       propF = freq (propFreq . sortFreqs)
+
+instance GenC ByteString where
+  genC conf = ByteString.pack <$> genC conf
 
 instance GenC Char where
   genC _ = elements [' '..'~'] -- TODO

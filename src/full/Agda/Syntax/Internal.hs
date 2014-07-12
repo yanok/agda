@@ -552,6 +552,12 @@ instance Suggest String String where
   suggest "_" y = y
   suggest  x  _ = x
 
+instance Suggest ByteString String where
+  suggest = suggest . ByteString.unpack
+
+instance Suggest ByteString ByteString where
+  suggest = suggest `on` ByteString.unpack
+
 instance Suggest (Abs a) (Abs b) where
   suggest b1 b2 = suggest (absName b1) (absName b2)
 

@@ -16,6 +16,8 @@ module Agda.Syntax.Abstract.Name
 
 import Control.Monad.State
 
+import Data.ByteString.Char8 (ByteString)
+import qualified Data.ByteString.Char8 as ByteString
 import Data.Foldable (Foldable)
 import Data.Traversable (Traversable)
 import Data.Typeable (Typeable)
@@ -131,6 +133,9 @@ class MkName a where
 instance MkName String where
   mkName r i s = Name i (C.Name noRange (C.stringNameParts s)) r defaultFixity'
 
+instance MkName ByteString where
+  mkName r i = mkName r i . ByteString.unpack
+
 
 qnameToList :: QName -> [Name]
 qnameToList (QName m x) = mnameToList m ++ [x]
@@ -224,6 +229,12 @@ instance FreshName Range where
 
 instance FreshName () where
   freshName_ () = freshNoName_
+
+instance FreshName (Range, ByteString) where
+  freshName_ (r, x) = freshName_ (r, ByteString.unpack x)
+
+instance FreshName ByteString where
+  freshName_ = freshName_ . ByteString.unpack
 
 -- | Get the next version of the concrete name. For instance, @nextName "x" = "x₁"@.
 --   The name must not be a 'NoName'.
