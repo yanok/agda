@@ -702,6 +702,8 @@ data Definition = Defn
   , defCompiledRep    :: CompiledRepresentation
   , defRewriteRules   :: RewriteRules
     -- ^ Rewrite rules for this symbol, (additional to function clauses).
+  , defInstance       :: Maybe QName
+    -- ^ @Just q@ when this definition is an instance of class q
   , theDef            :: Defn
   }
     deriving (Typeable, Show)
@@ -718,6 +720,7 @@ defaultDefn info x t def = Defn
   , defMutual         = 0
   , defCompiledRep    = noCompiledRep
   , defRewriteRules   = []
+  , defInstance       = Nothing
   , theDef            = def
   }
 
@@ -1833,11 +1836,13 @@ patternViolation = do
 internalError :: MonadTCM tcm => String -> tcm a
 internalError s = typeError $ InternalError s
 
+{-# SPECIALIZE typeError :: TypeError -> TCM a #-}
 typeError :: MonadTCM tcm => TypeError -> tcm a
-typeError err = liftTCM $ do
-    cl <- buildClosure err
-    s  <- get
-    throwError $ TypeError s cl
+typeError err = liftTCM $ throwError =<< typeError_ err
+
+{-# SPECIALIZE typeError_ :: TypeError -> TCM TCErr #-}
+typeError_ :: MonadTCM tcm => TypeError -> tcm TCErr
+typeError_ err = liftTCM $ TypeError <$> get <*> buildClosure err
 
 -- | Running the type checking monad (most general form).
 {-# SPECIALIZE runTCM :: TCEnv -> TCState -> TCM a -> IO (a, TCState) #-}

@@ -35,9 +35,9 @@ import qualified Data.HashTable.IO as H
 import Data.Int (Int32)
 import Data.IORef
 import Data.Map (Map)
-import qualified Data.Map as M
+import qualified Data.Map as Map
 import Data.Set (Set)
-import qualified Data.Set as S
+import qualified Data.Set as Set
 import qualified Data.Binary as B
 import qualified Data.Binary.Get as B
 import qualified Data.Binary.Put as B
@@ -87,7 +87,7 @@ import Agda.Utils.Impossible
 -- 32-bit machines). Word64 does not have these problems.
 
 currentInterfaceVersion :: Word64
-currentInterfaceVersion = 20140707 * 10 + 0
+currentInterfaceVersion = 20140721 * 10 + 0
 
 -- | Constructor tag (maybe omitted) and argument indices.
 
@@ -361,15 +361,15 @@ instance EmbPrj Bool where
 
 instance EmbPrj AbsolutePath where
   icode file = do
-    mm <- M.lookup file . fileMod <$> ask
+    mm <- Map.lookup file <$> asks fileMod
     case mm of
       Just m  -> icode m
       Nothing -> __IMPOSSIBLE__
   value m = do
     m :: TopLevelModuleName
             <- value m
-    mf      <- modFile  <$> get
-    incs    <- includes <$> get
+    mf      <- gets modFile
+    incs    <- gets includes
     (r, mf) <- liftIO $ findFile'' incs m mf
     modify $ \s -> s { modFile = mf }
     case r of
@@ -402,12 +402,12 @@ instance (Ord a, Ord b, EmbPrj a, EmbPrj b) => EmbPrj (BiMap a b) where
   value m = BiMap.fromList <$> value m
 
 instance (Ord a, EmbPrj a, EmbPrj b) => EmbPrj (Map a b) where
-  icode m = icode (M.toList m)
-  value m = M.fromList `fmap` value m
+  icode m = icode (Map.toList m)
+  value m = Map.fromList `fmap` value m
 
 instance (Ord a, EmbPrj a) => EmbPrj (Set a) where
-  icode s = icode (S.toList s)
-  value s = S.fromList `fmap` value s
+  icode s = icode (Set.toList s)
+  value s = Set.fromList `fmap` value s
 
 instance EmbPrj P.Interval where
   icode (P.Interval p q) = icode2' p q
@@ -902,8 +902,8 @@ instance EmbPrj MutualId where
   value n = MutId `fmap` value n
 
 instance EmbPrj Definition where
-  icode (Defn rel a b c d e f g h i) = icode10' rel a (P.killRange b) c d e f g h i
-  value = vcase valu where valu [rel, a, b, c, d, e, f, g, h, i] = valu10 Defn rel a b c d e f g h i
+  icode (Defn rel a b c d e f g h i j) = icode11' rel a (P.killRange b) c d e f g h i j
+  value = vcase valu where valu [rel, a, b, c, d, e, f, g, h, i, j] = valu11 Defn rel a b c d e f g h i j
                            valu _                             = malformed
 
 instance EmbPrj RewriteRule where
