@@ -39,7 +39,7 @@ import Agda.Syntax.Fixity
 import Agda.Syntax.Notation
 import Agda.Syntax.Literal
 
-import Agda.Utils.Hash
+import Agda.Utils.Hash ( hashString )
 import Agda.Utils.List (spanJust)
 import Agda.Utils.Monad
 import Agda.Utils.QuickCheck
@@ -1126,12 +1126,9 @@ Open : MaybeOpen 'import' ModuleName OpenArgs ImportDirective {%
     ; dir = $5
     ; r   = getRange (m, es, dir)
     ; mr  = getRange m
-    ; unique = hashString $ show $ (Nothing :: Maybe ()) <$ r
-         -- turn range into unique id, but delete file path
-         -- which is absolute and messes up suite of failing tests
-         -- (different hashs on different installations)
-         -- TODO: Don't use (insecure) hashes in this way.
-    ; fresh = Name mr [ Id $ stringToRawName $ ".#" ++ show m ++ "-" ++ show unique ]
+    ; fresh = Name mr [ Id $ ".#" ++ show m ++ "-" ++ show (hashString (show r)) ]
+              -- turn range into unique id
+              -- TODO: Don't use (insecure) hashes in this way.
     ; impStm asR = Import mr m (Just (AsName fresh asR)) DontOpen defaultImportDir
     ; appStm m' es =
         let r = getRange (m, es) in
